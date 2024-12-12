@@ -30,11 +30,12 @@
         </tr>
     </table>
     <?php if (isset($datosSesion->codUsuario)):?>
-        <p><a href="./servicio.php?codServicio=<?=$codServicio?>&solicitarServicio=si">Solicitar este servico</a></p>
-        <span style="color: <?=$color?> ;"><?=$mensaje?></span>
-        <?php else:?>
+        <?php if (!((int)$servicio->codUsuario === (int)$datosSesion->codUsuario)):?>
+            <p><a href="./servicio.php?codServicio=<?=$codServicio?>&solicitarServicio=si">Solicitar este servico</a></p>
+            <span style="color: <?=$color?> ;"><?=$mensaje?></span>
+        <?php endif;?>
+    <?php else:?>
         <p>Para solicitar un servicio primero debes <a href="./login.php">Iniciar Sesion</a></p>
     <?php endif?>
-    <p><a href="./">Volver</a></p>
 </body>
 </html>

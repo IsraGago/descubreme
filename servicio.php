@@ -12,7 +12,7 @@ $servicio = $con->getServicio($codServicio);
 if(!isset($servicio->codServicio)){error();}
 
 if (isset($_GET["solicitarServicio"],$datosSesion->codUsuario)) {
-    if($servicio->codUsuario == $datosSesion->codUsuario){
+    if(!((int)$servicio->codUsuario === (int)$datosSesion->codUsuario)){ // son diferentes
         try {
             $con->solicitarServicio($datosSesion->codUsuario,$codServicio);
             $mensaje ="Servicio solicitado con exito!";
@@ -20,8 +20,9 @@ if (isset($_GET["solicitarServicio"],$datosSesion->codUsuario)) {
         } catch (\Throwable $th) {
             $mensaje ="ERROR al solicitar el servicio, comprueba si ya lo habías solicitado.";
         }
-    } else {
+    } else { // son iguales
         $mensaje ="ERROR, no puedes solicitar tus propios servicios";
+        
     }
 }
 

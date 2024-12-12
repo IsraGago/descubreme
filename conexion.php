@@ -201,19 +201,6 @@ class Conexion extends PDO
             return $fila;
         }
     }
-    function insertarComentario($codIncidencia,$codUsuario,$comentario){
-        $sql="INSERT into comentarios(codIncidencia,codUsuario,comentario)
-              values (:codIncidencia,:codUsuario,:comentario)";
-              $stmt=$this->prepare($sql);
-              $stmt->bindParam(":codUsuario", $codUsuario);
-              $stmt->bindParam(":codIncidencia",$codIncidencia);
-              $stmt->bindParam(":comentario", $comentario);
-
-                if($stmt->execute()){
-                    return true;  
-                }
-                return false;
-    }
 
     function getHashUsuario($codUsuario){
         $sql="SELECT fechaUltimaModificacion from usuarios where codUsuario=$codUsuario";
@@ -223,7 +210,7 @@ class Conexion extends PDO
             $fechaUltimaModificacion=$fila->fechaUltimaModificacion;
         }
         
-        return hash("sha512",$usuario."X"."$fechaUltimaModificacion"."XD");
+        return hash("sha512",$codUsuario."X"."$fechaUltimaModificacion"."XD");
     }
 
     function insertarUsuario($email,$admin,$nombre,$apellido1,$apellido2,$telefono){
@@ -384,6 +371,33 @@ class Conexion extends PDO
         $sql="Select u.usuario,s.codServicio,u.codUsuario,s.titulo,s.fechaCreacion,s.descripcion,s.numUsuariosActuales,s.maxUsuarios from servicios s inner join usuarios u on s.codUsuario = u.codUsuario";
         $stmt=$this->prepare($sql);
         $stmt->execute();
+        $servicios=[];
+        while ($servicio = $stmt->fetch(PDO::FETCH_OBJ)) {
+        $servicios[] = $servicio;
+        }
+        return $servicios;
+
+    }
+
+    function getServiciosSolicitados($codUsuario){
+        // $sql="Select u.usuario,s.codServicio,u.codUsuario,s.titulo,s.fechaCreacion,s.numUsuariosActuales,s.maxUsuarios from servicios s inner join usuarios u on s.codUsuario = u.codUsuario where u.codUsuario = :codUsuario";
+        
+        $sql = "SELECT s.codServicio,u.usuario,s.titulo,s.fechaCreacion,s.numUsuariosActuales,s.maxUsuarios FROM usuarios_servicios us inner join servicios s on s.codServicio = us.codServicio inner join usuarios u on u.codUsuario = us.codUsuario where us.codUsuario =:codUsuario";      
+        $stmt=$this->prepare($sql);
+        $stmt->bindParam(":codUsuario",$codUsuario);
+        $stmt->execute();
+        $servicios=[];
+        while ($servicio = $stmt->fetch(PDO::FETCH_OBJ)) {
+        $servicios[] = $servicio;
+        }
+        return $servicios;
+    }
+    function getServiciosUsuario($codUsuario){
+        $sql="Select u.usuario,s.codServicio,u.codUsuario,s.titulo,s.fechaCreacion,s.descripcion,s.numUsuariosActuales,s.maxUsuarios from servicios s inner join usuarios u on s.codUsuario = u.codUsuario where u.codUsuario = :codUsuario";
+        $stmt=$this->prepare($sql);
+        $stmt->bindParam(":codUsuario",$codUsuario);
+        $stmt->execute();
+        $servicios=[];
         while ($servicio = $stmt->fetch(PDO::FETCH_OBJ)) {
         $servicios[] = $servicio;
         }
@@ -418,6 +432,33 @@ class Conexion extends PDO
             return $fila;
         }
         return false;
+    }
+
+    function insertarServicio($codUsuario,$titulo,$ubicacion,$maxUsuarios,$descripcion){
+        $sql="INSERT into servicios(codUsuario,titulo,ubicacion,maxUsuarios,descripcion)
+              values (:codUsuario,:titulo,:ubicacion,:maxUsuarios,:descripcion)";
+              $stmt=$this->prepare($sql);
+              $stmt->bindParam(":codUsuario", $codUsuario);
+              $stmt->bindParam(":titulo", $titulo);
+              $stmt->bindParam(":ubicacion", $ubicacion);
+              $stmt->bindParam(":maxUsuarios", $maxUsuarios);
+              $stmt->bindParam(":descripcion", $descripcion);
+
+            return $stmt->execute();
+    }
+
+    function eliminarServicio($codUsuario,$codServicio){
+        $sql="DELETE from servicios where codUsuario=$codUsuario AND codServicio=:codServicio ";
+        $stmt = $this->prepare($sql);
+        $stmt->bindParam(":codServicio", $codServicio);
+        return $stmt->execute();
+    }
+
+    function desapuntarUsuario($codUsuario,$codServicio){
+        $sql="DELETE from usuarios_servicios where codUsuario=$codUsuario AND codServicio=:codServicio ";
+        $stmt = $this->prepare($sql);
+        $stmt->bindParam(":codServicio", $codServicio);
+        return $stmt->execute();
     }
 
 }

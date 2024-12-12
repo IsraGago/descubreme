@@ -3,16 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Servicios</title>
+    <title>Mis servicios publicados</title>
     <link rel="stylesheet" href="./vistas/css/style.css">
 </head>
 <body>
-    <h1>Servicios</h1>
+    <h1>Mis servicios publicados</h1>
     <?php require "./vistas/nav.php" ?>
     <?php if (count($servicios)>0):?>
     <table>
         <tr>
-            <th>Usuario</th>
             <th>Titulo</th>
             <th>Fecha de creación</th>
             <th>Usuarios actuales</th>
@@ -23,7 +22,6 @@
         </tr>
         <?php foreach ($servicios as $clave => $servicio):?>
             <tr>
-                <td><?=$servicio->usuario?></td>
                 <td><a href="./servicio.php?codServicio=<?=$servicio->codServicio?>"><?=$servicio->titulo?></a></td>
                 <td><?=$servicio->fechaCreacion?></td>
                 <td><?=$servicio->numUsuariosActuales?></td>
@@ -37,7 +35,8 @@
         <?php endforeach?>
     </table>
     <?php else:?>
-        <p>Aún no se ha publicado ningún servicio</p>
+        <p>Aún no has publicado ningún servicio.</p>
     <?php endif;?>
+    <p><a href="./perfil.php">Volver</a></p>
 </body>
 </html>

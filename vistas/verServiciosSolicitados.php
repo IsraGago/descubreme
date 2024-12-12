@@ -3,22 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Servicios</title>
+    <title>Mis servicios publicados</title>
     <link rel="stylesheet" href="./vistas/css/style.css">
 </head>
 <body>
-    <h1>Servicios</h1>
+    <h1>Mis servicios publicados</h1>
     <?php require "./vistas/nav.php" ?>
     <?php if (count($servicios)>0):?>
-    <table>
+        <table>
         <tr>
-            <th>Usuario</th>
+            <th>Usuario creador</th>
             <th>Titulo</th>
             <th>Fecha de creación</th>
             <th>Usuarios actuales</th>
             <th>Usuarios Maximos</th>
             <?php if(isset($datosSesion->codUsuario)):?>
-                <th>Eliminar</th>
+                <th>Desapuntarse</th>
             <?php endif;?>
         </tr>
         <?php foreach ($servicios as $clave => $servicio):?>
@@ -29,15 +29,15 @@
                 <td><?=$servicio->numUsuariosActuales?></td>
                 <td><?=$servicio->maxUsuarios?></td>
                 <?php if(isset($datosSesion->codUsuario)):?>
-                    <?php if( (int)$datosSesion->codUsuario === (int)$servicio->codUsuario || $datosSesion->admin):?>
-                        <td><a  href="./eliminarServicio.php?codServicio=<?=$servicio->codServicio?>" onclick="return confirm('¿Está seguro de que desea eliminar el servicio: <?=$servicio->titulo?>?')"><?=$chars["eliminar"]?></a></td>                            
-                    <?php endif;?>
+                    <td><a  href="./desapuntarUsuario.php?codServicio=<?=$servicio->codServicio?>" onclick="return confirm('¿Está seguro de que desea desapuntarse del servicio: <?=$servicio->titulo?>?')"><?=$chars["eliminar"]?></a></td>                            
                 <?php endif;?>
             </tr>
         <?php endforeach?>
     </table>
     <?php else:?>
-        <p>Aún no se ha publicado ningún servicio</p>
+        <p>Aún no has solicitado ningún servicio.</p>
     <?php endif;?>
+    <p><a href="./perfil.php">Volver</a></p>
+
 </body>
 </html>
