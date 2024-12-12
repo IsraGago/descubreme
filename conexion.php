@@ -190,16 +190,8 @@ class Conexion extends PDO
         }
     }
     
-    function getUsuario($codUsuario){
-        $sql = "SELECT * FROM usuarios WHERE codUsuario=:codUsuario";
-        $stmt = $this->prepare($sql);
-        $stmt->bindParam(":codUsuario", $codUsuario);
-        $stmt->execute();
-        if ($fila = $stmt->fetch(PDO::FETCH_OBJ)) {
-            return $fila;
-        }
-        return false;
-    }
+
+
     function getDatosAdmin($codAdmin){
         $sql = "SELECT * FROM usuarios WHERE codUsuario=:codAdmin";
         $stmt = $this->prepare($sql);
@@ -415,6 +407,17 @@ class Conexion extends PDO
         $stmt->bindParam(":codServicio", $codServicio);
 
         return $stmt->execute();
+    }
+
+    function getUsuario($codUsuario){
+        $sql = "SELECT * FROM usuarios WHERE codUsuario=:codUsuario";
+        $stmt = $this->prepare($sql);
+        $stmt->bindParam(":codUsuario", $codUsuario);
+        $stmt->execute();
+        if ($fila = $stmt->fetch(PDO::FETCH_OBJ)) {
+            return $fila;
+        }
+        return false;
     }
 
 }
