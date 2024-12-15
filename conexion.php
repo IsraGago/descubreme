@@ -423,6 +423,19 @@ class Conexion extends PDO
         return $stmt->execute();
     }
 
+    function estaApuntado($codUsuario, $codServicio) {
+        $sql = "SELECT codUsuario FROM usuarios_servicios WHERE codUsuario = :codUsuario AND codServicio = :codServicio";
+        $stmt = $this->prepare($sql);
+    
+        $stmt->bindParam(':codUsuario', $codUsuario, PDO::PARAM_INT);
+        $stmt->bindParam(':codServicio', $codServicio, PDO::PARAM_INT);
+    
+        $stmt->execute();
+        $fila = $stmt->fetch(PDO::FETCH_OBJ);
+    
+        return  $fila !== false;
+    }
+
     function getUsuario($codUsuario){
         $sql = "SELECT * FROM usuarios WHERE codUsuario=:codUsuario";
         $stmt = $this->prepare($sql);

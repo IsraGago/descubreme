@@ -21,6 +21,9 @@
                     <th>Ubicación</th>
                     <th>Número de usuarios actuales</th>
                     <th>Número de usuarios máximos</th>
+                    <?php if($estaAutentificado):?>
+                        <th>Estás apuntado</th> 
+                    <?php endif;?>
                 </tr>
                 <tr>
                     <!-- <td><?=$servicio->codServicio?></td> -->
@@ -30,11 +33,14 @@
                     <td><?=$servicio->ubicacion?></td>
                     <td><?=$servicio->numUsuariosActuales?></td>
                     <td><?=$servicio->maxUsuarios?></td>
+                    <td style="color: <?=$estaApuntadoAlServicio?"green":"red";?> ;"><?=$estaApuntadoAlServicio?"Sí":"No";?></td>
                 </tr>
             </table>
             <?php if (isset($datosSesion->codUsuario)):?>
                 <?php if (!((int)$servicio->codUsuario === (int)$datosSesion->codUsuario)):?>
-                    <p><a href="./servicio.php?codServicio=<?=$codServicio?>&solicitarServicio=si">Solicitar este servico</a></p>
+                    <?php if(!$estaApuntadoAlServicio):?>
+                        <p><a href="./servicio.php?codServicio=<?=$codServicio?>&solicitarServicio=si" onclick="return confirm('¿Está seguro de que desea solicitar el servicio: <?=$servicio->titulo?>?')">Solicitar este servico</a></p>
+                    <?php endif;?>
                     <span style="color: <?=$color?> ;"><?=$mensaje?></span>
                 <?php endif;?>
             <?php else:?>
