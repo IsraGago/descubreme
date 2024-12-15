@@ -14,7 +14,7 @@
             header("Location:index.php");
             exit;
         } else {
-            $mensaje ="Error en los datos de inicio de sesión";
+            $mensaje ="Error en la autentificación";
         }
     }
     
