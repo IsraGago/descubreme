@@ -33,7 +33,9 @@
                     <td><?=$servicio->ubicacion?></td>
                     <td><?=$servicio->numUsuariosActuales?></td>
                     <td><?=$servicio->maxUsuarios?></td>
-                    <td style="color: <?=$estaApuntadoAlServicio?"green":"red";?> ;"><?=$estaApuntadoAlServicio?"Sí":"No";?></td>
+                    <?php if($estaAutentificado):?>
+                        <td style="color: <?=$estaApuntadoAlServicio?"green":"red";?> ;"><?=$estaApuntadoAlServicio?"Sí":"No";?></td>
+                    <?php endif;?>
                 </tr>
             </table>
             <?php if (isset($datosSesion->codUsuario)):?>

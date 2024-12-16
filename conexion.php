@@ -213,44 +213,6 @@ class Conexion extends PDO
         return hash("sha512",$codUsuario."X"."$fechaUltimaModificacion"."XD");
     }
 
-    function insertarUsuario($email,$admin,$nombre,$apellido1,$apellido2,$telefono){
-        if($apellido2==""){
-            $apellido2=null;
-        }
-        if($telefono==""){
-            $telefono=null;
-        }
-        if($admin==""){
-            $admin=0;
-        }
-        if($admin){
-            $sql="INSERT into usuarios (email,admin,nombre,apellido1,apellido2,telefono) values(:email,:admin,:nombre,:apellido1,:apellido2,:telefono)";
-        }else{
-            $sql="INSERT into usuarios (email,nombre,apellido1,apellido2,telefono) values(:email,:nombre,:apellido1,:apellido2,:telefono)";
-        }
-        $stmt=$this->prepare($sql);
-        $stmt->bindParam(":email", $email);
-        if($admin){
-            $stmt->bindParam(":admin", $admin);
-        }
-        $stmt->bindParam(":nombre", $nombre);
-        $stmt->bindParam(":apellido1", $apellido1);
-        $stmt->bindParam(":apellido2", $apellido2);
-        $stmt->bindParam(":telefono", $telefono);
-        if($stmt->execute()) {
-            return $this->lastInsertId();
-        } else {
-            // Recoge el código de error y la información de error
-            $errorInfo = $stmt->errorInfo();
-            $errorCode = $errorInfo[0];
-            $errorMessage = $errorInfo[2];
-            
-            // Puedes hacer lo que necesites con el código de error y el mensaje de error
-            // echo "Error al ejecutar la consulta. Código de error: $errorCode. Mensaje de error: $errorMessage";
-            
-            return false;
-        }
-    }
     function updateIncidencia($codIncidencia,$codPrioridad,$codAdmin){
         $sql="UPDATE incidencias set codPrioridad=:codPrioridad,codAdminAsignado=:codAdmin where codIncidencia=:codIncidencia";
         $stmt=$this->prepare($sql);
@@ -282,89 +244,6 @@ class Conexion extends PDO
             $comentarios[] = $comentario;
         }
         return $comentarios;
-    }
-    function getAdmins(){
-        $sql="SELECT * from admins";
-        $stmt = $this->prepare($sql);
-        $stmt->execute();
-        $admins=[];
-        while ($admin = $stmt->fetch(PDO::FETCH_OBJ)) {
-            $admins[] = $admin;
-        }
-        return $admins;
-    }
-   
-    function insertarIncidencia($codTipo,$codPrioridad,$codEquipo,$incidencia,$codUsuario){
-        $sql="INSERT into incidencias(codTipo,codPrioridad,codEquipo,incidencia,codUsuario)
-              values (:codTipo,:codPrioridad,:codEquipo,:incidencia,:codUsuario)";
-              $stmt=$this->prepare($sql);
-              $stmt->bindParam(":codUsuario", $codUsuario);
-              $stmt->bindParam(":codPrioridad",$codPrioridad);
-              $stmt->bindParam(":codEquipo", $codEquipo);
-              $stmt->bindParam(":incidencia", $incidencia);
-              $stmt->bindParam(":codTipo", $codTipo);
-                if($stmt->execute()){
-                    return true;  
-                }
-                return false;
-    }
-
-    
-
-    function getPrioridades(){
-        $sql="SELECT * FROM prioridades";
-        $stmt = $this->prepare($sql);
-        $stmt->execute();
-        $prioridades=[];
-        while ($prioridad = $stmt->fetch(PDO::FETCH_OBJ)) {
-            $prioridades[] = $prioridad;
-        }
-        return $prioridades;
-    }
-
-    function getEquipos(){
-        $sql="SELECT * FROM equipos";
-        $stmt = $this->prepare($sql);
-        $stmt->execute();
-        $equipos=[];
-        while ($equipo = $stmt->fetch(PDO::FETCH_OBJ)) {
-            $equipos[] = $equipo;
-        }
-        return $equipos;
-    }
-
-    function getNumIncidenciasUsuario($codUsuario){
-        $sql = "Select count(*) as numIncidencias from incidencias where codUsuario=:codUsuario";
-        $stmt = $this->prepare($sql);
-        $stmt->bindParam(":codUsuario", $codUsuario);
-        $stmt->execute();
-        if ($numero=$stmt->fetchObject())
-            return $numero->numIncidencias;
-        
-    }
-
-    function getIncidenciasUsuario($codUsuario){
-        $sql="Select * from incidencias where codUsuario=:codUsuario";
-        $stmt = $this->prepare($sql);
-        $stmt->bindParam(":codUsuario", $codUsuario);
-        $stmt->execute();
-        $incidencias=[];
-        while ($incidencia = $stmt->fetch(PDO::FETCH_OBJ)) {
-            $incidencias[] = $incidencia;
-        }
-        return $incidencias;
-    }
-    
-    function solucionarIncidencia($codIncidencia){
-        $sql="update incidencias set solucionada=1 where codIncidencia=:codIncidencia";
-        $stmt=$this->prepare($sql);
-        $stmt->bindParam(":codIncidencia", $codIncidencia);
-        if($stmt->execute()){
-            return true;
-        }
-        else{
-            return false;
-        }
     }
 
     function getServicios(){
@@ -473,6 +352,14 @@ class Conexion extends PDO
         $stmt->bindParam(":codServicio", $codServicio);
         return $stmt->execute();
     }
+    function insertarUsuario($usuario, $passwordHash) {
+        $sql = 'INSERT INTO usuarios(usuario, password) VALUES (:usuario, :passwordHash)';
+        $stmt = $this->prepare($sql);
+        $stmt->bindParam(":usuario", $usuario); 
+        $stmt->bindParam(":passwordHash", $passwordHash);
+        return $stmt->execute();
+    }
+    
 
 }
 
