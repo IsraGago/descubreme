@@ -261,7 +261,7 @@ class Conexion extends PDO
     function getServiciosSolicitados($codUsuario){
         // $sql="Select u.usuario,s.codServicio,u.codUsuario,s.titulo,s.fechaCreacion,s.numUsuariosActuales,s.maxUsuarios from servicios s inner join usuarios u on s.codUsuario = u.codUsuario where u.codUsuario = :codUsuario";
         
-        $sql = "SELECT s.codServicio,u.usuario,s.titulo,s.fechaCreacion,s.numUsuariosActuales,s.maxUsuarios FROM usuarios_servicios us inner join servicios s on s.codServicio = us.codServicio inner join usuarios u on u.codUsuario = us.codUsuario where us.codUsuario =:codUsuario";      
+        $sql = "SELECT s.codServicio,s.usuario,s.titulo,s.fechaCreacion,s.numUsuariosActuales,s.maxUsuarios FROM usuarios_servicios us inner join servicios s on s.codServicio = us.codServicio inner join usuarios u on u.codUsuario = us.codUsuario where us.codUsuario =:codUsuario";      
         $stmt=$this->prepare($sql);
         $stmt->bindParam(":codUsuario",$codUsuario);
         $stmt->execute();
