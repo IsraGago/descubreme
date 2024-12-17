@@ -17,7 +17,7 @@
         <form action="./publicarServicio.php" method="POST" id="publicarServicio">
             <input type="text" name="titulo" placeholder="Título" value="<?=$titulo?>"> <br>
             <input type="text" name="ubicacion" placeholder="Ubicación" value="<?=$ubicacion?>"><br>
-            <input type="number" name="maxUsuarios" placeholder="Número máxmio de personas"value="<?=$maxUsuarios?>"><br>
+            <input type="number" name="maxUsuarios" placeholder="Número máximo de personas"value="<?=$maxUsuarios?>"><br>
             <textarea name="descripcion" placeholder="Descripción" value="<?=$descripcion?>"></textarea><br>
             <input type="submit" value="Publicar servicio" >
         </form>
